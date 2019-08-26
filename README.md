@@ -1,27 +1,69 @@
-# NgTrainingStorybook
+# Storybook
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.0.
+This exercise helps you in understanding how to build testable component libraries with Storybook in Angular. 
 
-## Development server
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.6.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Tasks there were run before: 
 
-## Code scaffolding
+```
+ng new ngTraining-storybook --create-application=false
+cd ngTraining-storybook
+ng g lib components
+ng g m button
+ng g c button --module=button
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Tasks
 
-## Build
+1. Check the existing project and add a second component to your component library.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+2. Add storybook to your project `npx -p @storybook/cli sb init --type angular`.
 
-## Running unit tests
+3. Check the contents of the newly created `.storybook` folder. 
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+4. Remove the added `src/stories` folder.
 
-## Running end-to-end tests
+5. Update the path in the `.storybook/config.js` file to point to the component library.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+4. Add a npm script command to start storybook: `"storybook": "start-storybook"`.
 
-## Further help
+5. In case of errors you may need to add `"emitDecoratorMetadata": true,` to the `tsconfig.json` `compilerOptions`.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+6. Create your first story for the existing button:
+
+```
+import { storiesOf, moduleMetadata } from '@storybook/angular';
+import { ButtonModule } from './button.module';
+
+storiesOf('Button', module)
+    .addDecorator(
+        moduleMetadata({
+            imports: [ButtonModule],
+        }),
+    )
+    .add('default', () => {
+        return {
+            template: `<lib-button label="Hello World"></lib-button>`,
+        };
+    })
+```
+
+7. Add the knobs addon to your storybook: `npm i --save-dev @storybook/addon-knobs`.
+
+8. Add `addDecorator(withKnobs);` to your `config.js`.
+
+9. Register the plugin in the `addon.js` via `import '@storybook/addon-knobs/register';`.
+
+10. Add knobs to your button-story: 
+
+```
+const label = text('label', 'Hello World');
+
+return {
+	template: `<lib-button [label]="label"></lib-button>`,
+	props: {
+    	label
+	}
+};
+```
