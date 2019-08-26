@@ -3,7 +3,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 @Component({
   selector: 'lib-button',
   template: `
-    <button (click)="clicked.emit()">{{label}}</button>
+    <button (click)="clicked.emit()" [disabled]="disabled">{{label}}</button>
   `,
   styles: [
     `
@@ -16,6 +16,11 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
         box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
         border-radius: 3px;
       }
+
+      button:disabled, button[disabled]{
+        background: grey;
+        box-shadow: none;
+      }
     `
   ]
 })
@@ -24,4 +29,6 @@ export class ButtonComponent {
   public clicked = new EventEmitter();
   @Input()
   public label: string;
+  @Input()
+  public disabled = false;
 }
